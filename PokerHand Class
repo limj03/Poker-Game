@@ -1,0 +1,561 @@
+public class PokerHand
+{
+    private Card2[] player1hand, player2hand;
+    private int[] player1value, player2value;
+    private int[] player1suit, player2suit;
+    private int[] player1strength, player2strength;
+    private int[] player1cards, player2cards;
+    private int[] player1cards_sorted, player2cards_sorted;
+    private int hand = 5;
+    private int player1Points = 10;
+    private int player2Points = 10;
+    
+
+    public PokerHand()
+    {
+        player1hand = new Card2[5];
+        player2hand = new Card2[5];
+        player1value = new int[15];
+        player2value = new int[15];
+        player1suit = new int[4];
+        player2suit = new int[4];
+        player1strength = new int[6];
+        player2strength = new int[6];
+        player1cards = new int[5];
+        player2cards = new int[5];
+    }
+
+    public void play()
+    {
+        Deck2 deck2 = new Deck2();
+        deck2.shuffle();
+        int index1 = 0;
+        int index2 = 0;
+        String label1, label2;
+        int player1Bet = 0;
+        int player2Bet = 0;
+        
+//TESTER CODE
+/*
+player1hand[0] = new Card2(3, “Spades”);
+player2hand[0] = new Card2(2, “Spades”);
+player1hand[1] = new Card2(3, “Hearts”);
+player2hand[1] = new Card2(2, “Hearts”);
+player1hand[2] = new Card2(3, “Clubs”);
+player2hand[2] = new Card2(2, “Clubs”);
+player1hand[3] = new Card2(3, “Diamonds”);
+player2hand[3] = new Card2(2, “Diamonds”);
+player1hand[4] = new Card2(6, “Spades”);
+player2hand[4] = new Card2(5, “Hearts”);
+*/
+
+
+while((player1Points >0) && (player2Points >0))
+{
+     System.out.println( "Player 1 Bet:  " );
+     player1Bet = SCAN(.......);
+
+     System.out.println( "Player 2 Bet:  " );
+     player2Bet = SCAN(.......);
+
+     System.out.println( "Deal Cards …...  " );
+   
+        for (int i = 0; i < hand; i++)
+        {
+            player1hand[i] = deck2.deal(); // deals five cards per player
+            player2hand[i] = deck2.deal();
+            index1 = player1hand[i].getValue();
+            index2 = player2hand[i].getValue();
+            player1value[index1] = player1value[index1] + 1;
+            player2value[index2] = player2value[index2] + 1;
+//            player1cards[i] = index1;
+//            player2cards[i] = index2;
+
+            label1 = player1hand[i].getSuit();
+            if (label1.equals("Spades"))
+            {
+                player1suit[0] = player1suit[0] + 1;
+            }
+            else if (label1.equals("Hearts"))
+            {
+                player1suit[1] = player1suit[1] + 1;
+            }
+            else if (label1.equals("Clubs"))
+            {
+                player1suit[2] = player1suit[2] + 1;
+            }
+            else if (label1.equals("Diamonds"))
+            {
+                player1suit[3] = player1suit[3] + 1;
+            }
+
+            label2 = player2hand[i].getSuit();
+            if (label2.equals("Spades"))
+            {
+                player2suit[0] = player2suit[0] + 1;
+            }
+            else if (label2.equals("Hearts"))
+            {
+                player2suit[1] = player2suit[1] + 1;
+            }
+            else if (label2.equals("Clubs"))
+            {
+                player2suit[2] = player2suit[2] + 1;
+            }
+            else if (label2.equals("Diamonds"))
+            {
+                player2suit[3] = player2suit[3] + 1;
+            }
+        }
+/*
+        Arrays.sort(player1cards);
+        Arrays.sort(player2cards);
+*/
+        System.out.println( "Player 1 hand: " );
+        for (int i = 0; i < hand; i ++)
+        {
+            System.out.println( " " + player1hand[i]);
+        }
+
+        if(isStraight(player1value) == true && (isFlush(player1suit) == true))
+        {
+            System.out.println("Player 1 has a Straight Flush");
+            player1strength = getStraightFlushStrength(player1cards);
+        }
+        else if(isFlush(player1suit) == true)
+        {
+            System.out.println("Player 1 has a Flush");
+            player1strength = getFlushStrength(player1cards);
+        }
+        else if(isStraight(player1value) == true)
+        {
+            System.out.println("Player 1 has a Straight");
+            player1strength = getStraightStrength(player1cards);
+        }
+        else if(isFourOfAKind(player1value) == true)
+        {
+            System.out.println("Player 1 has a Four of a kind");
+            player1strength = getFourOfAKindStrength(player1value);
+        }
+        else if(isThreeOfAKind(player1value) == true && (isOnePair(player1value) == true))
+        {
+            System.out.println("Player 1 has a Full House");
+            player1strength = getFullHouseStrength(player1value);
+        }
+        else if(isThreeOfAKind(player1value) == true)
+        {
+            System.out.println("Player 1 has a Three of a kind");
+            player1strength = getThreeOfAKindStrength(player1value);
+        }
+        else if(isTwoPair(player1value) == true)
+        {
+            System.out.println("Player 1 has a Two Pairs");
+            player1strength = getTwoPairsStrength(player1value);
+        }
+        else if(isOnePair(player1value) == true)
+        {
+            System.out.println("Player 1 has a Pair");
+            player1strength = getOnePairStrength(player1value);
+        }
+        else
+        {
+            System.out.println("Player 1 has a High Card");
+            player1strength = getHighCardStrength(player1value);
+        }
+
+        System.out.println();
+        System.out.println( "Player 2 hand: " );
+        for (int i = 0; i < hand; i ++)
+        {
+            System.out.println( " " + player2hand[i]);
+        }
+
+        if(isStraight(player2value) == true && (isFlush(player2suit) == true))
+        {
+            System.out.println("Player 2 has a Straight Flush");
+            player2strength = getStraightFlushStrength(player2value);
+        }
+        else if(isFlush(player2suit) == true)
+        {
+            System.out.println("Player 2 has a Flush");
+            player2strength = getFlushStrength(player2value);
+        }
+        else if(isStraight(player2value) == true)
+        {
+            System.out.println("Player 2 has a Straight");
+            player2strength = getStraightStrength(player2value);
+        }
+        else if(isFourOfAKind(player2value) == true)
+        {
+            System.out.println("Player 2 has a Four of a kind");
+            player2strength = getFourOfAKindStrength(player2value);
+        }
+        else if(isThreeOfAKind(player2value) == true && (isOnePair(player2value) == true))
+        {
+            System.out.println("Player 2 has a Full House");
+           player2strength = getFullHouseStrength(player2value);
+        }
+        else if(isThreeOfAKind(player2value) == true)
+        {
+            System.out.println("Player 2 has a Three of a kind");
+            player2strength = getThreeOfAKindStrength(player2value);
+        }
+        else if(isTwoPair(player2value) == true)
+        {
+            System.out.println("Player 2 has a Two Pairs");
+            player2strength = getTwoPairsStrength(player2value);
+        }
+        else if(isOnePair(player2value) == true)
+        {
+            System.out.println("Player 2 has a Pair");
+            player2strength = getOnePairStrength(player2value);
+        }
+        else
+        {
+            system.out.println("Player 2 has a High Card");
+            player2strength = getHighCardStrength(player2value);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Compare who wins the hand
+boolean done = false;
+int i = 0;
+
+while((i <6) && (done == false))
+{
+     if(player1strength[i] > player2strength[i])
+     (
+         done = true;
+         system.out.println(“Player 1 wins the hand”);
+
+         player1Points = player1Points + player2Bet;
+         player2Points = player2Points - player2Bet;
+     )
+     else if(player1strength[i] < player2strength[i])
+     (
+         done = true;
+         system.out.println(“Player 2 wins the hand”);
+
+         player1Points = player1Points - player1Bet;
+         player2Points = player2Points + player1Bet;
+
+     )
+     else if(player1strength[i] == player2strength[i])
+     (
+         //system.out.println(“Tie hands!”);
+         i++;
+     )
+ }
+
+ if(done == false)
+ {
+        system.out.println(“Tie hands!”);
+ }
+
+
+system.out.println();
+system.out.println(“Player 1 Points = “ + player1Points);
+system.out.println(“Player 2 Points = “ + player2Points);
+
+} //continue betting
+
+
+    public boolean isFlush(int[] suit)
+    {
+        for (int i = 0; i < suit.length; i++)
+        {
+            if(suit[i] == 5)
+                return true;
+        }
+        return false;
+    }
+
+    public int[] getFlushStrength(int[] value) 
+    {
+       int[] strength = {5,0,0,0,0,0}; //Assign 1st element to 5 for the strength level of a fush; 2nd element for the highest card value of the 5 cards; follows by other cars in orders;
+
+       Int j = 1;
+       for(int i = value.length -1; i > 2; i--)
+       {
+                if(value[i] == 1)
+                {
+                    strength [j] = i;
+                    j++;
+                }
+       }
+
+/*
+        for(int i = 1; i < card_array.length; i++)
+        {
+            strength[i] = card_array[i-1];
+        }
+*/
+     return strength;
+}
+
+
+    public boolean isStraight(int[] value)
+    {
+        int k = 0;
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 1)
+            {
+                int j=i;
+                while(j<hand-1)
+                {
+                    j++;
+                    if(value[j] !=1)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+  public int[] GetStraightStrength(int[] value)
+    {
+        int[] strength = {4,0,0,0,0,0}; //Assign 1st element to 4 for the strength level of a Straight; 2nd element for the highest straight card value; rest follow the other straight card values or can be ignored;
+  
+       Int j = 1;
+       for(int i = value.length -1; i > 2; i--)
+       {
+                if(value[i] == 1)
+                {
+                    strength [j] = i;
+                    j++;
+                }
+       }
+
+/*      
+        for(int i = 1; i < value.length; i++)
+        {
+            strength[i] = value[i-1];
+        }
+*/
+
+        return strength;
+}
+
+
+  public int[] GetStraightFlushStrength(int[] value)
+    {
+        int[] strength = {8,0,0,0,0,0}; //Assign 1st element to 4 for the strength level of a Straight Flush; 2nd element for the highest straight card value; rest follow the other straight card values or can be ignored;
+    
+       Int j = 1;
+       for(int i = value.length -1; i > 2; i--)
+       {
+                if(value[i] == 1)
+                {
+                    strength [j] = i;
+                    j++;
+                }
+       }
+
+/*      
+        for(int i = 1; i < value.length; i++)
+        {
+            strength[i] = value[i-1];
+        }
+*/
+        return strength;
+ }
+
+
+    public boolean isFourOfAKind(int[] value)
+    {
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 4)
+                return true;
+        }
+        return false;
+    }
+
+    public int[] GetFourOfAKindStrength(int[] value)
+    {
+        int[] strength = {7,0,0,0,0,0}; //Assign 1st element to 7 for the strength level of a 4 of a kind; 2nd element for the card value of the 4 same cards; others can be ignored;
+
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 4)
+            {
+                strength[1] = i;
+            }
+        }
+/*
+        strength[2] = 0;
+        strength[3] = 0;
+        strength[4] = 0;
+        strength[5] = 0;
+*/
+        return strength;
+    }
+
+
+    public boolean isThreeOfAKind(int[] value)
+    {
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 3)
+                return true;
+        }
+        return false;
+    }
+
+
+  public int[] getThreeOfAKindStrength(int[] value) 
+  {
+   int[] strength = {3,0,0,0,0,0}; //Assign 1st element to 3 for the strength level of a three of a kind; 2nd element for the card value of the 3 same cards; others can be ignored;
+
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 3)
+            {
+                strength[1] = i;
+            }
+        }
+/*
+        strength[2] = 0;
+        strength[3] = 0;
+        strength[4] = 0;
+        strength[5] = 0;
+*/
+        return strength;
+    }
+
+
+    public boolean isTwoPair(int[] value)
+    {
+        int count = 0;
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 2)
+            {
+                count++;
+            }
+        }
+        if(count == 2)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    public int[] getTwoPairStrength(int[] value) 
+    {
+        int[] strength = {2,0,0,0,0,0}; //Assign 1st element to 2 for the strength level of a two pairs hand; 2nd element for the highest pair cards value of the 5 cards; follows by the second pair cards value; then the last card value;
+       
+        Int j = 1;
+        for(int i = value.length -1; i > 2; i--)
+        {
+                 if(value[i] == 2)
+                 {
+                     strength [j] =i;
+                     j++;
+                 }
+        }
+
+        for(int i = value.length -1; i > 2; i--)
+        {
+                if(value[i] == 1)
+                {
+                    strength [j -1] = i;
+                }
+        }
+
+        return strength;
+
+    }
+            
+
+
+    public boolean isOnePair(int[] value)
+    {
+        int count = 0;
+        for(int i = 2; i < value.length; i++)
+        {
+            if(value[i] == 2)
+            {
+                count++;
+            }
+        }
+        if(count == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+   public int[] getOnePairStrength(int[] value) 
+    {
+        Int j = 2;
+        int[] strength = {1,0,0,0,0,0}; //Assign 1st element to 1 for the strength level of a one pair hand; 2nd element for the paired cards value of the 5 cards; follows by other cars in orders;
+        {
+             for(int i = value.length -1; i > 2; i--)
+             {
+                 if(value[i] == 2;
+                 strength [1] = i;;
+             }
+        }
+
+        for(int i = value.length -1; i > 2; i--)
+        {
+            if(value[i] == 1)
+            {
+                strength [j] = i;
+                j++;
+            }
+         }
+
+        return strength;;
+    }
+
+
+    public boolean isHighCard(int[] amount)
+    {
+        return false;
+    }
+
+   public int[] getHighCardStrength(int[] value) 
+    {
+        int[] strength = {0,0,0,0,0,0}; //Assign 1st element to 0 for the strength level of a high card hand; 2nd element for the highest card value of the 5 cards; follows by other cars in orders;
+  
+       Int j = 1;
+       for(int i = value.length -1; i > 2; i--)
+       {
+                if(value[i] == 1)
+                {
+                    strength [j] = i;
+                    j++;
+                }
+       }
+
+/*
+        for(int i = 1; i < card_array.length; i++)
+        {
+            strength[i] = card_array[i-1];
+        }
+*/
+        return strength;
+ }
+
+
+}
