@@ -1,0 +1,81 @@
+//DECK
+public class Deck2
+{
+    private int top;
+    private int numCards2;
+    private Card2[] cards2;
+
+    public Deck2()
+    {
+        numCards2 = 52;
+        cards2 = new Card2[numCards2];
+        top = 0;
+        String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+        for (int suit = 0; suit < 4; suit++)
+        {
+            for (int value = 2; value <= 14; value++)
+            {
+                cards2[top] = new Card2(value, suits[suit]);
+                top++;
+            }
+        }
+        top = 0;
+    }
+
+    public void print()
+    {
+        for (int i = top; i < numCards2; i++)
+        {
+            if (i % 10 == 0)
+                System.out.println();
+            System.out.print(cards2[i] + "\t");
+
+        }
+    }
+
+    public Card2 deal()
+    {
+        Card2 answer = cards2[top];
+        top++;
+        return answer;
+    }
+
+    public void shuffle()
+    {
+        for (int i = 0; i < numCards2 -1; i++)
+        {
+            //get random index "k" from i to 51
+            //swap cards [k] and cards [i]
+            int k = i + ((int)(Math.random() * ((double)(numCards2 - i))));
+            Card2 temp = cards2[i];
+            cards2[i] = cards2[k];
+            cards2[k] = temp;
+            
+        }
+    }
+
+    //checks if cards are all different pairs and no dublicates
+    //for debugging
+    public void verify()
+    {
+        for (int i = 0; i < numCards2 -1; i++)
+        {
+            Card2 c1 = cards2[i];
+            for (int j = i + 1; j < numCards2; i++)
+            {
+                Card2 c2 = cards2[j];
+                assert((c1.getValue()  != c2.getValue()) || (c1.getValue() != c2.getValue()));
+            }
+        }
+    }
+    
+    public boolean hasCards2()
+    {
+        return (top != numCards2);
+    }
+
+    public int getSize()
+    {
+        return numCards2;
+    }
+}
